@@ -8,13 +8,6 @@ export const test = base.extend({
       content: `* { transition-duration: 0s !important; animation: none !important; }`
     });
 
-    // กัน cache
-    await page.route('**/*', route => {
-      route.continue({
-        headers: { 'Cache-Control': 'no-cache' }
-      });
-    });
-
     await use(page);
   }
 });

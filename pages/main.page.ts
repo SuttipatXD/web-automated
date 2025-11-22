@@ -1,20 +1,19 @@
-import { Page } from "@playwright/test";
+// pages/main.page.ts
+import { Page, Locator, expect } from '@playwright/test';
 
 export class MainPage {
-  constructor(public page: Page) {}
+  readonly page: Page;
 
-  async goTo() {
-    await this.page.goto('/', { waitUntil: 'networkidle' });
+  // SELECTORS
+  readonly registerCard: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.registerCard = page.locator('a:nth-of-type(1) > div');
   }
 
-  async clickElement(locator: string) {
-    await this.page.waitForSelector(locator);
-    await this.page.click(locator);
-  }
-
-  async clickAndFill(locator: string, text: string) {
-    await this.page.waitForSelector(locator);
-    await this.page.click(locator);
-    await this.page.fill(locator, text);
+  async openRegisterPage() {
+    await this.registerCard.waitFor({ state: 'visible' });
+    await this.registerCard.click();
   }
 }

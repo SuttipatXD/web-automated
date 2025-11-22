@@ -4,10 +4,11 @@ export class MainPage {
   constructor(public page: Page) {}
 
   async goTo() {
-    await this.page.goto('/');
+    await this.page.goto('/', { waitUntil: 'networkidle' });
   }
 
-  async clickBanner(locator: string) {
+  async clickElement(locator: string) {
+    await this.page.waitForSelector(locator);
     await this.page.click(locator);
   }
 }

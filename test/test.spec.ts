@@ -5,8 +5,6 @@ import { OtpPage } from '../pages/otp.page';
 
 test('BeWallet KYC Success flow', async ({ page }) => {
 
-  await page.setViewportSize({ width: 1626, height: 1064 });
-
   // navigate
   await page.goto('/');
   await expect(page).toHaveTitle(/BeWallet/);

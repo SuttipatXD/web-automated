@@ -11,4 +11,10 @@ export class MainPage {
     await this.page.waitForSelector(locator);
     await this.page.click(locator);
   }
+
+  async clickAndFill(locator: string, text: string) {
+    await this.page.waitForSelector(locator);
+    await this.page.click(locator);
+    await this.page.fill(locator, text);
+  }
 }

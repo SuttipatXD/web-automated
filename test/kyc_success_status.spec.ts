@@ -16,7 +16,7 @@ test("KYC Success flow", async ({ page }) => {
   const result = new ResultPage(page);
 
   // STEP 1 — go to register page
-  await main.openRegisterPage();
+  await main.openKYCPage();
 
   // STEP 2 — login (phone + id card)
   await login.login(
@@ -25,7 +25,7 @@ test("KYC Success flow", async ({ page }) => {
   );
 
   // STEP 3 — OTP
-  await otp.processOtp("123456");
+  await otp.processOtp("123456", true);
 
   // STEP 4 — Result
   await result.resultSuccessStatus();

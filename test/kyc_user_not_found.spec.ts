@@ -4,7 +4,7 @@ import { LoginPage } from '../pages/login.page';
 import { OtpPage } from '../pages/otp.page';
 import { ResultPage } from "../pages/result.page";
 
-test('KYC Waiting flow', async ({ page }) => {
+test('User not Found flow', async ({ page }) => {
 
   // navigate
   await page.goto('/');
@@ -20,14 +20,8 @@ test('KYC Waiting flow', async ({ page }) => {
   await main.openKYCPage();
 
   // STEP 2 — login (phone + id card)
-  await login.login(process.env.WAITING_PHONE_NUMBER!, process.env.WAITING_ID_CARD!);
+  await login.login(process.env.USER_NOT_FOUND_PHONE_NUMBER!, process.env.USER_NOT_FOUND_ID_CARD!);
 
-  // STEP 3 — OTP
-  await otp.processOtp('123456', true);
-
-  // STEP 4 — Result
-  await result.resultWaitingStatus();
-
-  // ผลลัพธ์สุดท้าย (กลับหน้าแรก)
-  await expect(page).toHaveURL(process.env.BASE_URL!);
+  // STEP 3 — Result
+  await result.resultNotFoundStatus();
 });

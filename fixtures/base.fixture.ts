@@ -1,7 +1,15 @@
 import { test as base } from "@playwright/test";
+import { usersFixture } from './user.fixture';
 
-export const test = base.extend({
+
+export const test = base.extend<{
+  user: { phone: string; idcard: string };
+}>({
+  ...usersFixture,
+
   page: async ({ page }, use) => {
+
+    
     // ตั้งค่า viewport เป็น Full HD
     await page.setViewportSize({
       width: 1920,

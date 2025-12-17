@@ -4,7 +4,7 @@ import { LoginPage } from "../pages/login.page";
 import { OtpPage } from "../pages/otp.page";
 import { ResultPage } from "../pages/result.page";
 
-test("KYC Success flow", async ({ page }) => {
+test('@user userA KYC Success flow', async ({ page, user }) => {
   // navigate
   await page.goto("/");
   await expect(page).toHaveTitle(/BeWallet/);
@@ -19,10 +19,7 @@ test("KYC Success flow", async ({ page }) => {
   await main.openKYCPage();
 
   // STEP 2 — login (phone + id card)
-  await login.login(
-    process.env.SUCCESS_PHONE_NUMBER!,
-    process.env.SUCCESS_ID_CARD!
-  );
+  await login.login(user.phone, user.idcard);
 
   // STEP 3 — OTP
   await otp.processOtp("123456", true);

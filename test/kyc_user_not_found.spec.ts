@@ -4,7 +4,7 @@ import { LoginPage } from '../pages/login.page';
 import { OtpPage } from '../pages/otp.page';
 import { ResultPage } from "../pages/result.page";
 
-test('User not Found flow', async ({ page }) => {
+test('@user userB User not Found flow', async ({ page, user }) => {
 
   // navigate
   await page.goto('/');
@@ -20,7 +20,7 @@ test('User not Found flow', async ({ page }) => {
   await main.openKYCPage();
 
   // STEP 2 — login (phone + id card)
-  await login.login(process.env.USER_NOT_FOUND_PHONE_NUMBER!, process.env.USER_NOT_FOUND_ID_CARD!);
+  await login.login(user.phone, user.idcard);
 
   // STEP 3 — Result
   await result.resultNotFoundStatus();

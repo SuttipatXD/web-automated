@@ -78,6 +78,29 @@ BASE_URL=https://your-app-url.com
 
 ## การรัน Test
 
+### ใช้ npm scripts (แนะนำ)
+
+```bash
+# รัน test ทั้งหมด
+npm test
+
+# รัน test พร้อมดู browser (headed mode)
+npm run test:headed
+
+# รัน test เฉพาะ flow
+npm run test:success       # KYC Success
+npm run test:waiting       # KYC Waiting
+npm run test:not-found     # User Not Found
+
+# ดู HTML report หลังรัน test
+npm run test:report
+
+# ติดตั้ง browser (ครั้งแรก)
+npm run install:browsers
+```
+
+### ใช้ Playwright CLI โดยตรง
+
 ```bash
 # รัน test ทั้งหมด
 npx playwright test

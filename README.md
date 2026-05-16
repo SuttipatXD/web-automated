@@ -17,9 +17,7 @@ web-automated/
 │   ├── otp.page.ts           # หน้า OTP — กรอกและยืนยัน OTP
 │   └── result.page.ts        # หน้าผลลัพธ์ — Success / Waiting / Not Found
 ├── test/
-│   ├── kyc_success_status.spec.ts    # Test: KYC สำเร็จ (userA)
-│   ├── kyc_waiting_status.spec.ts    # Test: KYC รอตรวจสอบ (userC)
-│   └── kyc_user_not_found.spec.ts    # Test: ไม่พบข้อมูลผู้ใช้ (userB)
+│   └── verify-your-identity.spec.ts  # Test: KYC ทุก flow (userA, userB, userC)
 ├── utils/
 │   └── users.json            # ข้อมูล user สำหรับ test (ถูก .gitignore)
 ├── .env                      # Environment variables (BASE_URL)
@@ -87,10 +85,8 @@ npm test
 # รัน test พร้อมดู browser (headed mode)
 npm run test:headed
 
-# รัน test เฉพาะ flow
-npm run test:success       # KYC Success
-npm run test:waiting       # KYC Waiting
-npm run test:not-found     # User Not Found
+# รัน test เฉพาะ KYC flows
+npm run test:kyc
 
 # ดู HTML report หลังรัน test
 npm run test:report
@@ -106,7 +102,7 @@ npm run install:browsers
 npx playwright test
 
 # รัน test เฉพาะไฟล์
-npx playwright test test/kyc_success_status.spec.ts
+npx playwright test test/verify-your-identity.spec.ts
 
 # รันพร้อมดู browser (headed mode)
 npx playwright test --headed
@@ -119,19 +115,15 @@ npx playwright show-report
 
 ## Test Cases
 
-### 1. KYC Success Flow
-**ไฟล์:** `test/kyc_success_status.spec.ts`
+**ไฟล์:** `test/verify-your-identity.spec.ts`
 
+### 1. KYC → success status (userA)
 ขั้นตอน: เปิดหน้าหลัก → ไปหน้า KYC → Login (phone + idcard) → กรอก OTP → แสดงผล **"สมัคร BeWallet สำเร็จ"** → กลับหน้าแรก
 
-### 2. KYC Waiting Flow
-**ไฟล์:** `test/kyc_waiting_status.spec.ts`
-
+### 2. KYC → waiting status (userC)
 ขั้นตอน: เปิดหน้าหลัก → ไปหน้า KYC → Login → กรอก OTP → แสดงผล **"กำลังตรวจสอบการยืนยันตัวตน"** → กลับหน้าแรก
 
-### 3. User Not Found Flow
-**ไฟล์:** `test/kyc_user_not_found.spec.ts`
-
+### 3. KYC → user not found (userB)
 ขั้นตอน: เปิดหน้าหลัก → ไปหน้า KYC → Login → แสดงผล **"ไม่สามารถทำรายการได้ สอบถามรายละเอียดเพิ่มเติม โทร.1220"**
 
 ---
@@ -141,7 +133,7 @@ npx playwright show-report
 Test แต่ละตัวกำหนด user ผ่าน `@user <key>` ในชื่อ test:
 
 ```typescript
-test('@user userA KYC Success flow', async ({ page, user }) => {
+test('@user userA KYC → success status', async ({ page, user }) => {
   // user.phone และ user.idcard ถูก inject อัตโนมัติจาก users.json
 });
 ```

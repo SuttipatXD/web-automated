@@ -20,7 +20,7 @@ export class ResultPage {
     });
     this.successMsg = page.locator("p", { hasText: "สมัคร BeWallet สำเร็จ" });
     this.confirmButton = page.getByRole("button", { name: "ยืนยัน" });
-    this.understoodButton = page.getByRole("button", { name: "ฉันเข้าใจแล้ว" });
+    this.understoodButton = page.getByRole("link", { name: "ฉันเข้าใจแล้ว" });
   }
 
   async waitForNotFoundMessage() {

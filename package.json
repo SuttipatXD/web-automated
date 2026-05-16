@@ -6,9 +6,7 @@
   "scripts": {
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
-    "test:success": "npx playwright test test/kyc_success_status.spec.ts",
-    "test:waiting": "npx playwright test test/kyc_waiting_status.spec.ts",
-    "test:not-found": "npx playwright test test/kyc_user_not_found.spec.ts",
+    "test:verify": "npx playwright test test/verify-your-identity.spec.ts",
     "test:report": "npx playwright show-report",
     "install:browsers": "npx playwright install firefox"
   },

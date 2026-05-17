@@ -9,7 +9,9 @@
     "test:verify": "npx playwright test test/verify-your-identity.spec.ts",
     "test:register": "npx playwright test test/register.spec.ts",
     "test:report": "npx playwright show-report",
-    "install:browsers": "npx playwright install firefox"
+    "install:browsers": "npx playwright install firefox",
+    "dashboard": "node scripts/generate-dashboard.js",
+    "test:dashboard": "npx playwright test && node scripts/generate-dashboard.js"
   },
   "keywords": [],
   "author": "",

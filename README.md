@@ -32,7 +32,10 @@ web-automated/
 │   └── src/
 │       ├── selfie.png        # รูป selfie สำหรับ KYC
 │       └── idCard.png        # รูปบัตรประชาชนสำหรับ KYC
+├── scripts/
+│   └── generate-dashboard.js # สร้าง Dashboard HTML จาก test results
 ├── .env                      # Environment variables (BASE_URL)
+├── dashboard.html            # Test Results Dashboard (auto-generated)
 └── playwright.config.ts      # Playwright configuration
 ```
 
@@ -124,6 +127,12 @@ npm run test:register
 # ดู HTML report หลังรัน test
 npm run test:report
 
+# สร้าง Dashboard จาก results ที่มีอยู่แล้ว แล้วเปิด browser
+npm run dashboard
+
+# รัน test ทั้งหมด แล้วเปิด Dashboard ต่อเลย
+npm run test:dashboard
+
 # ติดตั้ง browser (ครั้งแรก)
 npm run install:browsers
 ```
@@ -165,6 +174,27 @@ npx playwright show-report
 
 ---
 
+## Test Dashboard
+
+หลังจากรัน test แล้ว สามารถเปิด Dashboard สรุปผลแบบ visual ได้ด้วย:
+
+```bash
+npm run test:dashboard   # รัน test + เปิด Dashboard
+npm run dashboard        # เปิด Dashboard จาก results ล่าสุด
+```
+
+Dashboard แสดง:
+- สถานะรวม (PASSED / FAILED) พร้อมวันเวลาและระยะเวลาที่ใช้
+- Stat Cards — Total / Passed / Failed / Skipped พร้อม count-up animation
+- Donut Chart — สัดส่วน pass/fail/skip
+- Pass Rate Progress Bar
+- Test Suite Cards — แยกตามไฟล์ พร้อม duration bar ของแต่ละ test
+- Error message สำหรับ test ที่ fail
+
+> Dashboard ถูก generate เป็นไฟล์ `dashboard.html` ที่ root และเปิด browser อัตโนมัติ
+
+---
+
 ## User Fixture
 
 Test แต่ละตัวกำหนด user ผ่าน `@user <key>` ในชื่อ test:
@@ -191,5 +221,5 @@ Fixture จะอ่านชื่อ test, แยก key หลัง `@user`,
 | Expect Timeout   | 15 วินาที ต่อ assertion/waitFor         |
 | Parallel         | เปิด (fullyParallel: true)              |
 | Retry (CI)       | 2 ครั้ง                                 |
-| Reporter         | HTML (`playwright-report/index.html`)   |
+| Reporter         | HTML + JSON (`test-results/results.json`) |
 | Base URL         | กำหนดจาก `.env` → `BASE_URL`           |

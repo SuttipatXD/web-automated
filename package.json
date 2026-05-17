@@ -7,6 +7,7 @@
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
     "test:verify": "npx playwright test test/verify-your-identity.spec.ts",
+    "test:register": "npx playwright test test/register.spec.ts",
     "test:report": "npx playwright show-report",
     "install:browsers": "npx playwright install firefox"
   },

@@ -1,5 +1,5 @@
-// fixtures/user.fixture.ts
 import rawUsers from '../utils/users.json';
+import { randomThaiPhone, randomThaiIdCard } from '../utils/random';
 import type { TestInfo } from '@playwright/test';
 
 type User = {
@@ -10,11 +10,7 @@ type User = {
 const users = rawUsers as Record<string, User>;
 
 export const usersFixture = {
-  user: async (
-    {},
-    use: any,
-    testInfo: TestInfo   // ✅ ใส่ type ตรงนี้
-  ) => {
+  user: async ({}, use: any, testInfo: TestInfo) => {
     const match = testInfo.title.match(/@user\s+(\w+)/);
 
     if (!match) {
@@ -22,13 +18,18 @@ export const usersFixture = {
     }
 
     const userKey = match[1];
-    console.log(`🔍 กำลังใช้ user key: ${userKey}`);
-    const selectedUser = users[userKey];
+    const raw = users[userKey];
 
-    if (!selectedUser) {
+    if (!raw) {
       throw new Error(`❌ ไม่พบ user '${userKey}' ใน users.json`);
     }
 
+    const selectedUser: User = {
+      phone: raw.phone === 'random' ? randomThaiPhone() : raw.phone,
+      idcard: raw.idcard === 'random' ? randomThaiIdCard() : raw.idcard,
+    };
+
+    console.log(`🔍 user key: ${userKey} | phone: ${selectedUser.phone} | idcard: ${selectedUser.idcard}`);
     await use(selectedUser);
-  }
+  },
 };

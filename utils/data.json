@@ -1,0 +1,47 @@
+{
+  "common": {
+    "otp": "123456",
+    "pin": "131313"
+  },
+  "userD": {
+    "personalInfo": {
+      "laserCode": "AA2-2222222-22",
+      "title": "นาย",
+      "firstName": "ทดสอบ",
+      "lastName": "สมัคร",
+      "birthYear": "2540",
+      "birthMonth": "กุมภาพันธ์",
+      "birthDay": "10",
+      "email": "test@gmail.com",
+      "purpose": "ชำระสินเชื่อ"
+    },
+    "addressData": {
+      "address1": {
+        "houseNumber": "23",
+        "province": "ชัยภูมิ",
+        "district": "บ้านแท่น",
+        "subDistrict": "สระพัง"
+      },
+      "address2": {
+        "houseNumber": "56",
+        "province": "ชัยนาท",
+        "district": "วัดสิงห์",
+        "subDistrict": "หนองน้อย"
+      },
+      "income": "- 20,000 บาท",
+      "incomeSource": "มรดก",
+      "occupation": "อาสาสมัครสาธารณสุขประจำหมู่บ้าน (อสม.)",
+      "company": "โรงพยาบาลส่งเสริมสุขภาพตำบล (รพ.สต.)",
+      "workAddress": {
+        "houseNumber": "68",
+        "province": "ชลบุรี",
+        "district": "บ้านบึง",
+        "subDistrict": "คลองกิ่ว"
+      }
+    },
+    "files": {
+      "selfie": "utils/src/selfie.png",
+      "idCard": "utils/src/idCard.png"
+    }
+  }
+}

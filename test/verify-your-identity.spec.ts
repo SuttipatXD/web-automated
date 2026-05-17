@@ -4,6 +4,9 @@ import { MainPage } from "../pages/main.page";
 import { LoginPage } from "../pages/login.page";
 import { OtpPage } from "../pages/otp.page";
 import { ResultPage } from "../pages/result.page";
+import rawData from "../utils/data.json";
+
+const { otp: otpCode } = rawData.common;
 
 async function setupKYC(page: Page, user: { phone: string; idcard: string }) {
   await page.goto("/");
@@ -15,7 +18,7 @@ async function setupKYC(page: Page, user: { phone: string; idcard: string }) {
 
 test("@user userA KYC → success status", async ({ page, user }) => {
   const { otp, result } = await setupKYC(page, user);
-  await otp.processOtp("123456", true);
+  await otp.processOtp(otpCode, true);
   await result.resultSuccessStatus();
   await expect(page).toHaveURL(process.env.BASE_URL!);
 });
@@ -27,7 +30,7 @@ test("@user userB KYC → user not found", async ({ page, user }) => {
 
 test("@user userC KYC → waiting status", async ({ page, user }) => {
   const { otp, result } = await setupKYC(page, user);
-  await otp.processOtp("123456", true);
+  await otp.processOtp(otpCode, true);
   await result.resultWaitingStatus();
   await expect(page).toHaveURL(process.env.BASE_URL!);
 });

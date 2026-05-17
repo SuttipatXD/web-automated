@@ -9,7 +9,7 @@ export function randomThaiPhone(): string {
 }
 
 export function randomThaiIdCard(): string {
-  const first = String(Math.floor(Math.random() * 8) + 1);
+  const first = String(Math.floor(Math.random() * 3) + 1);
   const middle = randomDigits(11);
   const digits = (first + middle).split('').map(Number);
 

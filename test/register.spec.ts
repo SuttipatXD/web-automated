@@ -37,11 +37,11 @@ test("@user userD Register → waiting status", async ({ page, user }) => {
   const { otp, consent, kycPhoto, personalInfoPage, address, pin, result } =
   await setupRegisterFull(page, user);
 
-  await otp.processOtp(otpCode, false);
+  await otp.processRegisterOtp(otpCode);
   await consent.processConsent();
   await kycPhoto.processPhotoAndUpload(files.selfie, files.idCard);
   await personalInfoPage.fillPersonalInfo(personalInfo);
-  await address.fillAddressForm(addressData);
+  await address.fillRegistrationForm(addressData);
   await pin.setPin(pinCode);
   await result.resultWaitingStatus();
 });

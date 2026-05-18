@@ -21,7 +21,16 @@ export class ConsentPage {
     this.confirmButton = page.getByRole('button', { name: 'ยืนยัน' });
   }
 
-  async acceptConsent() {
+  private async isVisible(locator: Locator, timeout = 5000): Promise<boolean> {
+    try {
+      await locator.waitFor({ state: 'visible', timeout });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async acceptTermsAndConditions() {
     await this.consentDataText.waitFor({ state: 'visible' });
     await this.consentDataText.click();
     await this.lastTermsHeading.scrollIntoViewIfNeeded();
@@ -29,7 +38,7 @@ export class ConsentPage {
     await this.consentButton.click();
   }
 
-  async acceptPersonalData() {
+  async acceptPersonalDataConsent() {
     await this.personalDataText.waitFor({ state: 'visible' });
     await this.personalDataText.click();
     await this.lastConsentHeading.scrollIntoViewIfNeeded();
@@ -40,7 +49,7 @@ export class ConsentPage {
   }
 
   async processConsent() {
-    await this.acceptConsent();
-    await this.acceptPersonalData();
+    if (await this.isVisible(this.consentDataText)) await this.acceptTermsAndConditions();
+    if (await this.isVisible(this.personalDataText)) await this.acceptPersonalDataConsent();
   }
 }

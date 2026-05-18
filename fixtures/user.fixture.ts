@@ -29,7 +29,10 @@ export const usersFixture = {
       idcard: raw.idcard === 'random' ? randomThaiIdCard() : raw.idcard,
     };
 
-    console.log(`🔍 user key: ${userKey} | phone: ${selectedUser.phone} | idcard: ${selectedUser.idcard}`);
+    await testInfo.attach('user', {
+      body: `user key: ${userKey} | phone: ${selectedUser.phone} | idcard: ${selectedUser.idcard}`,
+      contentType: 'text/plain',
+    });
     await use(selectedUser);
   },
 };

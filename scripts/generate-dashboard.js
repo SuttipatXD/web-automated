@@ -60,9 +60,10 @@ for (const t of allTests) {
 }
 
 // ── Compute stats ─────────────────────────────────────────────────────────────
+const FAIL_STATUSES = new Set(['failed', 'timedOut', 'interrupted']);
 const total = allTests.length;
 const passed = allTests.filter(t => t.status === 'passed').length;
-const failed = allTests.filter(t => t.status === 'failed').length;
+const failed = allTests.filter(t => FAIL_STATUSES.has(t.status)).length;
 const skipped = allTests.filter(t => t.status === 'skipped').length;
 const passRate = total > 0 ? Math.round((passed / total) * 100) : 0;
 const overallOk = failed === 0 && total > 0;
@@ -129,7 +130,7 @@ function buildSuitesHTML() {
   let html = '';
   for (const [file, tests] of suiteMap) {
     const sp = tests.filter(t => t.status === 'passed').length;
-    const sf = tests.filter(t => t.status === 'failed').length;
+    const sf = tests.filter(t => FAIL_STATUSES.has(t.status)).length;
     const ss = tests.filter(t => t.status === 'skipped').length;
     const maxDur = Math.max(...tests.map(t => t.duration), 1);
 
@@ -336,13 +337,13 @@ const html = `<!DOCTYPE html>
   }
   .pass-rate-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
   .pass-rate-label { font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
-  .pass-rate-pct { font-size: 28px; font-weight: 800; color: ${overallOk ? 'var(--pass)' : 'var(--fail)'}; }
+  .pass-rate-pct { font-size: 28px; font-weight: 800; color: var(--pass); }
   .progress-track {
     height: 10px; background: var(--border); border-radius: 99px; overflow: hidden;
   }
   .progress-fill {
     height: 100%; border-radius: 99px;
-    background: ${overallOk ? 'linear-gradient(90deg,#4ade80,#16a34a)' : 'linear-gradient(90deg,#fca5a5,#dc2626)'};
+    background: linear-gradient(90deg,#4ade80,#16a34a);
     width: 0%;
     transition: width 1.2s cubic-bezier(.22,1,.36,1);
   }
@@ -403,10 +404,12 @@ const html = `<!DOCTYPE html>
     width: 8px; height: 8px; border-radius: 50%;
     margin-top: 6px; flex-shrink: 0;
   }
-  .status-passed  .test-dot { background: var(--pass-ring); }
-  .status-failed  .test-dot { background: var(--fail-ring); }
-  .status-skipped .test-dot { background: var(--skip-ring); }
-  .status-unknown .test-dot { background: #94a3b8; }
+  .status-passed      .test-dot { background: var(--pass-ring); }
+  .status-failed      .test-dot { background: var(--fail-ring); }
+  .status-timedOut    .test-dot { background: var(--fail-ring); }
+  .status-interrupted .test-dot { background: var(--fail-ring); }
+  .status-skipped     .test-dot { background: var(--skip-ring); }
+  .status-unknown     .test-dot { background: #94a3b8; }
 
   .test-body { flex: 1; min-width: 0; }
   .test-title-row {
@@ -414,7 +417,9 @@ const html = `<!DOCTYPE html>
     gap: 12px; flex-wrap: wrap;
   }
   .test-name { font-size: 14px; font-weight: 500; color: var(--text); }
-  .status-failed .test-name { color: var(--fail); }
+  .status-failed      .test-name { color: var(--fail); }
+  .status-timedOut    .test-name { color: var(--fail); }
+  .status-interrupted .test-name { color: var(--fail); }
 
   .test-tags { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
   .tag-browser {
@@ -436,10 +441,12 @@ const html = `<!DOCTYPE html>
   }
   .dur-bar-wrap { height: 3px; background: #f1f5f9; border-radius: 99px; margin-top: 8px; }
   .dur-bar { height: 100%; border-radius: 99px; }
-  .dur-bar.status-passed  { background: var(--pass-ring); }
-  .dur-bar.status-failed  { background: var(--fail-ring); }
-  .dur-bar.status-skipped { background: var(--skip-ring); }
-  .dur-bar.status-unknown { background: #94a3b8; }
+  .dur-bar.status-passed      { background: var(--pass-ring); }
+  .dur-bar.status-failed      { background: var(--fail-ring); }
+  .dur-bar.status-timedOut    { background: var(--fail-ring); }
+  .dur-bar.status-interrupted { background: var(--fail-ring); }
+  .dur-bar.status-skipped     { background: var(--skip-ring); }
+  .dur-bar.status-unknown     { background: #94a3b8; }
 
   /* ── Footer ── */
   .footer {

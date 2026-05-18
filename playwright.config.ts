@@ -7,7 +7,7 @@ import dotenv from "dotenv";
  */
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
-dotenv.config();
+dotenv.config({ quiet: true });
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -24,7 +24,7 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [["html"], ["json", { outputFile: "test-results/results.json" }]],
+  reporter: [["list"], ["html"], ["json", { outputFile: "test-results/results.json" }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */

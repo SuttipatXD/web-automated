@@ -39,8 +39,8 @@ test("@user userD Register → waiting status", async ({ page, user }) => {
 
   await otp.processRegisterOtp(otpCode);
   await consent.processConsent();
-  await kycPhoto.processPhotoAndUpload(files.selfie, files.idCard);
   await personalInfoPage.fillPersonalInfo(personalInfo);
+  await kycPhoto.processPhotoAndUpload(files.selfie, files.idCard);
   await address.fillRegistrationForm(addressData);
   await pin.setPin(pinCode);
   await result.resultWaitingStatus();

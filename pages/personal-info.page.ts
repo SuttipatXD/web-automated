@@ -25,9 +25,11 @@ export class PersonalInfoPage {
   readonly purposeButton: Locator;
   readonly confirmButton: Locator;
   readonly nextButton: Locator;
+  readonly contactInfoHeading: Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.contactInfoHeading = page.locator("p.text-lg", { hasText: "กรอกข้อมูลส่วนตัว" });
     this.laserInput = page.getByTestId("input-laser");
     this.titleSelect = page.getByText("คำนำหน้าชื่อ");
     this.firstNameInput = page.getByTestId("input-firstname");
@@ -51,6 +53,7 @@ export class PersonalInfoPage {
   }
 
   async fillPersonalInfo(info: PersonalInfo) {
+    await this.contactInfoHeading.waitFor({ state: "visible" });
     await this.fillIdAndName(info);
     await this.birthYearSelect.click();
     await this.page.getByRole("option", { name: info.birthYear }).click();
@@ -67,6 +70,7 @@ export class PersonalInfoPage {
   }
 
   async fillVerifyPersonalInfo(info: PersonalInfo) {
+    await this.contactInfoHeading.waitFor({ state: "visible" });
     await this.fillIdAndName(info);
     await this.page.getByTestId("select-birth-year").click();
     await this.page.getByRole("option", { name: info.birthYear }).click();

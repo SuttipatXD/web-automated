@@ -32,9 +32,11 @@ export class AddressPage {
   readonly houseNumber2: Locator;
   readonly workHouseNumber: Locator;
   readonly nextButton: Locator;
+  readonly verifyHeading: Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.verifyHeading = page.locator("p.text-lg", { hasText: "กรอกข้อมูลสำหรับติดต่อ" });
     this.houseNumber1 = page.getByPlaceholder("เลขที่, อาคาร").nth(0);
     this.houseNumber2 = page.getByPlaceholder("เลขที่, อาคาร").nth(1);
     this.workHouseNumber = page.getByPlaceholder("เลขที่, อาคาร").nth(2);
@@ -90,6 +92,7 @@ export class AddressPage {
   }
 
   async fillVerifyForm(data: AddressData) {
+    await this.verifyHeading.waitFor({ state: "visible" });
     this.page.setDefaultTimeout(3000);
     await this.selectDropdown(
       this.page.getByText('ระบุรายได้'),

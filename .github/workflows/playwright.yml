@@ -31,6 +31,9 @@ jobs:
       - name: Install Playwright browsers (Firefox)
         run: npx playwright install firefox --with-deps
 
+      - name: Create users.json from secret
+        run: echo '${{ secrets.USERS_JSON }}' > utils/users.json
+
       - name: Run register tests
         run: npm run test:register
         env:

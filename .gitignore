@@ -4,9 +4,6 @@
 .env.production.local
 .env.development.local
 
-# Test-data
-users.json
-
 # Playwright
 node_modules/
 /test-results/

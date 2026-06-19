@@ -1,10 +1,8 @@
-name: Playwright Tests - Register
+name: Playwright Tests - Scheduled (Daily)
 
 on:
-  push:
-    branches: [main, dev]
-  pull_request:
-    branches: [main, dev]
+  schedule:
+    - cron: '0 9 * * 1-5'  # ทุกวันธรรมดา 16:00 Asia/Bangkok (UTC+7) — GitHub Actions ใช้ UTC เสมอ
   workflow_dispatch:
 
 jobs:

@@ -7,7 +7,7 @@ on:
     branches: [main, dev]
   workflow_dispatch:
   schedule:
-    - cron: '0 8 * * 1-5'  # ทุกวันธรรมดา 16:00 Asia/Bangkok (UTC+7) — GitHub Actions ใช้ UTC เสมอ
+    - cron: '0 9 * * 1-5'  # ทุกวันธรรมดา 16:00 Asia/Bangkok (UTC+7) — GitHub Actions ใช้ UTC เสมอ
 
 jobs:
   test:
@@ -72,19 +72,12 @@ jobs:
       - name: Test summary
         if: always()
         run: |
-          if [ -f "test-results/results.json" ]; then
-            echo "## Test Results" >> $GITHUB_STEP_SUMMARY
-            node -e "
-              const fs = require('fs');
-              const r = JSON.parse(fs.readFileSync('test-results/results.json','utf8'));
-              const stats = r.stats || {};
-              const passed = stats.expected || 0;
-              const failed = stats.unexpected || 0;
-              const skipped = stats.skipped || 0;
-              const total = passed + failed + skipped;
-              const icon = failed > 0 ? ':x:' : ':white_check_mark:';
-              console.log(\`| \${icon} | Passed | Failed | Skipped | Total |\`);
-              console.log('|---|---|---|---|---|');
-              console.log(\`| | \${passed} | \${failed} | \${skipped} | \${total} |\`);
-            " >> $GITHUB_STEP_SUMMARY
-          fi
+          [ ! -f "test-results/results.json" ] && exit 0
+          node -e "
+            const fs = require('fs');
+            const r = JSON.parse(fs.readFileSync('test-results/results.json', 'utf8'));
+            const { expected: passed = 0, unexpected: failed = 0, skipped = 0 } = r.stats || {};
+            const status = failed > 0 ? '❌ Failed' : '✅ Passed';
+            const table = '| Passed | Failed | Skipped |\n| --- | --- | --- |\n| ' + passed + ' | ' + failed + ' | ' + skipped + ' |';
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, '## ' + status + '\n\n' + table + '\n');
+          "

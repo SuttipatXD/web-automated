@@ -7,7 +7,7 @@ on:
     branches: [main, dev]
   workflow_dispatch:
   schedule:
-    - cron: '0 9 * * 1-5'  # ทุกวันธรรมดา 16:00 Asia/Bangkok (UTC+7) — GitHub Actions ใช้ UTC เสมอ
+    - cron: '0 8 * * 1-5'  # ทุกวันธรรมดา 16:00 Asia/Bangkok (UTC+7) — GitHub Actions ใช้ UTC เสมอ
 
 jobs:
   test:

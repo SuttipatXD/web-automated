@@ -69,13 +69,4 @@ jobs:
 
       - name: Test summary
         if: always()
-        run: |
-          [ ! -f "test-results/results.json" ] && exit 0
-          node -e "
-            const fs = require('fs');
-            const r = JSON.parse(fs.readFileSync('test-results/results.json', 'utf8'));
-            const { expected: passed = 0, unexpected: failed = 0, skipped = 0 } = r.stats || {};
-            const status = failed > 0 ? '❌ Failed' : '✅ Passed';
-            const table = '| Passed | Failed | Skipped |\n| --- | --- | --- |\n| ' + passed + ' | ' + failed + ' | ' + skipped + ' |';
-            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, '## ' + status + '\n\n' + table + '\n');
-          "
+        run: node scripts/test-summary.js

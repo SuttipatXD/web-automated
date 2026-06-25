@@ -36,6 +36,12 @@ jobs:
           CI: true
           BASE_URL: ${{ secrets.BASE_URL }}
 
+      - name: Run bind account tests
+        run: npm run test:bind-account
+        env:
+          CI: true
+          BASE_URL: ${{ secrets.BASE_URL }}
+
       - name: Generate test dashboard
         if: always()
         run: node scripts/generate-dashboard.js

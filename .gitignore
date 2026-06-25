@@ -5,7 +5,7 @@
 .env.development.local
 
 # Test-data
-users.json
+utils/users.json
 
 # Playwright
 node_modules/

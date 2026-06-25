@@ -5,11 +5,39 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const RESULTS = path.join(ROOT, 'test-results', 'results.json');
+const RESULTS_DIR = path.join(ROOT, 'test-results');
 
-if (!fs.existsSync(RESULTS) || !process.env.GITHUB_STEP_SUMMARY) process.exit(0);
+if (!process.env.GITHUB_STEP_SUMMARY) process.exit(0);
 
-const r = JSON.parse(fs.readFileSync(RESULTS, 'utf-8'));
+function findResultFiles(dir) {
+  const found = [];
+  if (!fs.existsSync(dir)) return found;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) found.push(...findResultFiles(full));
+    else if (entry.name === 'results.json') found.push(full);
+  }
+  return found;
+}
+
+const resultFiles = findResultFiles(RESULTS_DIR);
+if (resultFiles.length === 0) process.exit(0);
+
+const parsed = resultFiles.map(f => JSON.parse(fs.readFileSync(f, 'utf-8')));
+const mergedStats = parsed.reduce((acc, r) => {
+  const s = r.stats || {};
+  return {
+    expected:   (acc.expected   || 0) + (s.expected   || 0),
+    unexpected: (acc.unexpected || 0) + (s.unexpected || 0),
+    skipped:    (acc.skipped    || 0) + (s.skipped    || 0),
+    flaky:      (acc.flaky      || 0) + (s.flaky      || 0),
+    duration:   (acc.duration   || 0) + (s.duration   || 0),
+    startTime:  acc.startTime || s.startTime,
+  };
+}, {});
+const mergedSuites = parsed.flatMap(r => r.suites || []);
+
+const r = { stats: mergedStats, suites: mergedSuites };
 const { expected = 0, unexpected: failed = 0, skipped = 0, flaky = 0, duration = 0, startTime } = r.stats || {};
 const passed = expected;
 const total = passed + failed + skipped + flaky;

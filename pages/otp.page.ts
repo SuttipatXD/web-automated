@@ -3,6 +3,7 @@ import { Page, Locator, expect } from "@playwright/test";
 export class OtpPage {
   readonly page: Page;
   readonly kycPageHeader: Locator;
+  readonly bindPageHeader: Locator; 
   readonly registerPageHeader: Locator;
   readonly otpHeader: Locator;
   readonly otpInput: Locator;
@@ -12,6 +13,7 @@ export class OtpPage {
   constructor(page: Page) {
     this.page = page;
     this.kycPageHeader = page.getByText("ตรวจสอบผลสมัคร", { exact: true });
+    this.bindPageHeader = page.getByText("ผูกบัญชีธนาคาร", { exact: true });
     this.registerPageHeader = page.getByText("สมัครสมาชิกบุญเติม", { exact: true });
     this.otpHeader = page.locator("div.font-medium", { hasText: "กรอกรหัสยืนยันตัวตน" });
     this.otpInput = page.locator("input").first();
@@ -41,5 +43,13 @@ export class OtpPage {
     await this.confirmButton.waitFor({ state: "visible" });
     await expect(this.confirmButton).toBeEnabled();
     await this.confirmButton.click();
+  }
+
+  async processBindAccountOtp(otp: string) {
+    await this.bindPageHeader.waitFor({ state: "visible" });
+    await this.fillOtp(otp);
+    await this.okButton.waitFor({ state: "visible" });
+    await expect(this.okButton).toBeEnabled();
+    await this.okButton.click();
   }
 }

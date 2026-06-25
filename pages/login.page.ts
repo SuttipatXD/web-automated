@@ -21,7 +21,7 @@ export class LoginPage {
     }
 
     await this.phoneInput.waitFor({ state: 'visible' });
-    await this.phoneInput.fill(phone);
+    await this.phoneInput.pressSequentially(phone, { delay: 50 });
   }
 
   async fillIdCard(idCard: string) {
@@ -30,7 +30,7 @@ export class LoginPage {
     }
 
     await this.idCardInput.waitFor({ state: 'visible' });
-    await this.idCardInput.fill(idCard);
+    await this.idCardInput.pressSequentially(idCard, { delay: 50 });
   }
 
   async clickNext() {

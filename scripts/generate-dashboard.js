@@ -6,18 +6,44 @@ const path = require('path');
 const { exec } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const RESULTS = path.join(ROOT, 'test-results', 'results.json');
+const RESULTS_DIR = path.join(ROOT, 'test-results');
 const OUTPUT = path.join(ROOT, 'dashboard.html');
 
-// ── Read & parse ──────────────────────────────────────────────────────────────
-if (!fs.existsSync(RESULTS)) {
-  console.error('\x1b[31m✗\x1b[0m test-results/results.json not found.');
+// ── Find all results.json files recursively ───────────────────────────────────
+function findResultFiles(dir) {
+  const found = [];
+  if (!fs.existsSync(dir)) return found;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      found.push(...findResultFiles(full));
+    } else if (entry.name === 'results.json') {
+      found.push(full);
+    }
+  }
+  return found;
+}
+
+const resultFiles = findResultFiles(RESULTS_DIR);
+
+if (resultFiles.length === 0) {
+  console.error('\x1b[31m✗\x1b[0m No results.json found under test-results/.');
   console.error('  Run \x1b[33mnpm test\x1b[0m first to generate results.');
   process.exit(1);
 }
 
-const raw = JSON.parse(fs.readFileSync(RESULTS, 'utf-8'));
-const { stats, suites: rawSuites, config = {} } = raw;
+// ── Merge all results ─────────────────────────────────────────────────────────
+const parsed = resultFiles.map(f => JSON.parse(fs.readFileSync(f, 'utf-8')));
+
+const rawSuites = parsed.flatMap(r => r.suites || []);
+const config = parsed[0].config || {};
+const stats = {
+  startTime: parsed.reduce((earliest, r) => {
+    const t = new Date(r.stats?.startTime || earliest);
+    return t < new Date(earliest) ? r.stats.startTime : earliest;
+  }, parsed[0].stats?.startTime),
+  duration: parsed.reduce((sum, r) => sum + (r.stats?.duration || 0), 0),
+};
 
 // ── Extract all tests recursively ─────────────────────────────────────────────
 function extractTests(suiteList, fileName) {

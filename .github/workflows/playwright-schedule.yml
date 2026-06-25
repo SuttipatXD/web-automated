@@ -118,12 +118,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Download all test results
+      - name: Download register results
         uses: actions/download-artifact@v4
         with:
-          pattern: test-results-*-${{ github.run_number }}
-          path: test-results/
-          merge-multiple: true
+          name: test-results-register-${{ github.run_number }}
+          path: test-results/register/
+
+      - name: Download bind account results
+        uses: actions/download-artifact@v4
+        with:
+          name: test-results-bind-account-${{ github.run_number }}
+          path: test-results/bind-account/
 
       - name: Generate test dashboard
         run: node scripts/generate-dashboard.js

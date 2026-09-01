@@ -48,11 +48,11 @@ export class BindAccountPage {
   }
 
   async verifyOsmImgBanks() {
-    await expect(this.page.locator("div").filter({ hasText: "ธ.ก.ส" }).nth(2)).toBeVisible();
+    await expect(this.page.getByRole("button", { name: "ธ.ก.ส." })).toBeVisible();
   }
 
   async verifyOtherImgBanks() {
-    await expect(this.page.locator("a").filter({ hasText: "ธ.ก.ส" })).toBeVisible();
-    await expect(this.page.locator("a").filter({ hasText: "กรุงไทย" })).toBeVisible();
+    await expect(this.page.getByRole("button", { name: "ธ.ก.ส." })).toBeVisible();
+    await expect(this.page.getByRole("button", { name: "กรุงไทย" })).toBeVisible();
   }
 }
